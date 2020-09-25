@@ -1,8 +1,8 @@
 ---
-title: "Perdiz point shape as a function of site/raw material?"
+title: "Aryballoid shape as a function of applique/burnishing?"
 author: "Robert Z. Selden, Jr."
 date: "`r format(Sys.time(), '%d %B, %Y')`"
-output: github_document
+output: html_document
 ---
 
 ```{r setup, include=FALSE}
@@ -20,15 +20,15 @@ library(wesanderson)
 library(Momocs)
 
 # read images
-jpg.list <- list.files(here("/img.perdiz"), full.names = TRUE)
+jpg.list <- list.files(here("/jpegs"), full.names = TRUE)
 
 # read attribute data
-att.data <- read.csv("perdiz.csv", header = TRUE, as.is = TRUE)
+att.data <- read.csv("att.csv", header = TRUE, as.is = TRUE)
 
 # attribute to factor
-att.data$type <- as.factor(att.data$type)
-att.data$trinomial <- as.factor(att.data$trinomial)
-att.data$raw.mat <- as.factor(att.data$raw.mat)
+att.data$museum <- as.factor(att.data$museum)
+att.data$burnish <- as.factor(att.data$burnish)
+att.data$applique <- as.factor(att.data$applique)
 ```
 
 ## Generate outlines
@@ -55,10 +55,10 @@ norm.outlines <- data.out %>%
 # outline pile
 pile(norm.outlines)
 
-# mosaic of individual specimens from the different sites
-mosaic(norm.outlines, ~trinomial)
-# mosaic of individual specimens rendered from different materials
-mosaic(norm.outlines, ~raw.mat)
+# mosaic - appliqued or not
+mosaic(norm.outlines, ~applique)
+# mosaic - burnished or not
+mosaic(norm.outlines, ~burnish)
 ```
 
 ## Calibrate harmonic + EFA
@@ -68,13 +68,13 @@ mosaic(norm.outlines, ~raw.mat)
 calibrate_harmonicpower_efourier(norm.outlines, 
                                  nb.h = 30)
 
-# 11 harmonics needed to capture 99 percent of variation
+# 10 harmonics needed to capture 99 percent of variation
 calibrate_reconstructions_efourier(norm.outlines, 
-                                   range = 1:11)
+                                   range = 1:10)
 
-# generate efa outlines with 11 harmonics
+# generate efa outlines with 10 harmonics
 efa.outlines <- efourier(norm.outlines, 
-                         nb.h = 11, 
+                         nb.h = 10, 
                          norm = TRUE)
 
 # use efa.outlines for pca
@@ -90,18 +90,18 @@ scree_plot(pca.outlines)
 # plot pca by site
 plot_PCA(pca.outlines, 
          morphospace_position = "range",
-         ~trinomial, zoom = 1.25)
+         ~applique, zoom = 1.25)
 
 # plot pca by raw material
 plot_PCA(pca.outlines, 
          morphospace_position = "range",
-         ~raw.mat, zoom = 1.25)
+         ~burnish, zoom = 1.25)
 
 # contribution of each pc
 # by site
-boxplot(pca.outlines, ~trinomial, nax = 1:5)
+boxplot(pca.outlines, ~applique, nax = 1:5)
 # by raw material
-boxplot(pca.outlines, ~raw.mat, nax = 1:5)
+boxplot(pca.outlines, ~burnish, nax = 1:5)
 
 # mean shape + 2sd for the first 10 pcs
 PCcontrib(pca.outlines, nax = 1:5)
@@ -112,15 +112,11 @@ PCcontrib(pca.outlines, nax = 1:5)
 ```{r manova, out.width = "100%", dpi = 300, echo=TRUE, warning=FALSE}
 # manova
 
-# shape difference between sites?
-MANOVA(pca.outlines, 'trinomial')
-# which differ?
-MANOVA_PW(pca.outlines, 'trinomial')
+# shape difference if appliqued?
+MANOVA(pca.outlines, 'applique')
 
-# shape difference between raw.mat?
-MANOVA(pca.outlines, 'raw.mat')
-# which differ?
-MANOVA_PW(pca.outlines, 'raw.mat')
+# shape difference if burnished?
+MANOVA(pca.outlines, 'burnish')
 ```
 
 ## Mean shapes
@@ -128,11 +124,11 @@ MANOVA_PW(pca.outlines, 'raw.mat')
 ```{r ms1, out.width = "100%", dpi = 300, echo=TRUE, warning=FALSE}
 # mean shapes
 
-# site
-ms.2 <- MSHAPES(efa.outlines, ~trinomial)
+# applique
+ms.2 <- MSHAPES(efa.outlines, ~applique)
 plot_MSHAPES(ms.2, size = 0.75)
 
-# raw material
-ms.3 <- MSHAPES(efa.outlines, ~raw.mat)
+# burnish
+ms.3 <- MSHAPES(efa.outlines, ~burnish)
 plot_MSHAPES(ms.3, size = 0.75)
 ```
