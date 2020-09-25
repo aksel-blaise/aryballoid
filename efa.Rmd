@@ -2,7 +2,7 @@
 title: "Aryballoid shape as a function of applique/burnishing?"
 author: "Robert Z. Selden, Jr."
 date: "`r format(Sys.time(), '%d %B, %Y')`"
-output: github_document
+output: html_document
 ---
 
 ```{r setup, include=FALSE}
