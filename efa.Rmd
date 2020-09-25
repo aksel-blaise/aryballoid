@@ -2,7 +2,7 @@
 title: "Aryballoid shape as a function of applique/burnishing?"
 author: "Robert Z. Selden, Jr."
 date: "`r format(Sys.time(), '%d %B, %Y')`"
-output: html_document
+output: github_document
 ---
 
 ```{r setup, include=FALSE}
@@ -90,12 +90,12 @@ scree_plot(pca.outlines)
 # plot pca by site
 plot_PCA(pca.outlines, 
          morphospace_position = "range",
-         ~applique, zoom = 1.25)
+         ~applique, zoom = 0.95)
 
 # plot pca by raw material
 plot_PCA(pca.outlines, 
          morphospace_position = "range",
-         ~burnish, zoom = 1.25)
+         ~burnish, zoom = 0.95)
 
 # contribution of each pc
 # by site

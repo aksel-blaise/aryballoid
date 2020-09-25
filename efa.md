@@ -77,7 +77,7 @@ outlines <- jpg.list %>%
     ## [ 20 / 21 ]  7072.jpg
     ## [ 21 / 21 ]  X-49.jpg
 
-    ## Done in 7 secs
+    ## Done in 7.1 secs
 
 ``` r
 # add attributes
@@ -252,7 +252,7 @@ scree_plot(pca.outlines)
 # plot pca by site
 plot_PCA(pca.outlines, 
          morphospace_position = "range",
-         ~applique, zoom = 1.25)
+         ~applique, zoom = 0.95)
 ```
 
 <img src="efa_files/figure-gfm/pca.plot-2.png" width="100%" />
@@ -261,7 +261,7 @@ plot_PCA(pca.outlines,
 # plot pca by raw material
 plot_PCA(pca.outlines, 
          morphospace_position = "range",
-         ~burnish, zoom = 1.25)
+         ~burnish, zoom = 0.95)
 ```
 
 <img src="efa_files/figure-gfm/pca.plot-3.png" width="100%" />
