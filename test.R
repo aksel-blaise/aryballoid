@@ -3,13 +3,13 @@ library(here)
 library(Momocs)
 
 # read images
-jpg.list <- list.files(here("/img.perdiz"), full.names = TRUE)
+jpg.list <- list.files(here("/jpegs"), full.names = TRUE)
 
 # read attribute data
-att.data <- read.csv("perdiz.csv", header = TRUE, as.is = TRUE)
+att.data <- read.csv("att.csv", header = TRUE, as.is = TRUE)
 
 # attribute to factor
-att.data$type <- as.factor(att.data$type)
+att.data$museum <- as.factor(att.data$museum)
 att.data$trinomial <- as.factor(att.data$trinomial)
 att.data$raw.mat <- as.factor(att.data$raw.mat)
 
@@ -31,8 +31,8 @@ norm.outlines <- data.out %>%
 pile(norm.outlines)
 
 panel(norm.outlines, names = TRUE)
-# mosaic of individual specimens from the different sites
-mosaic(norm.outlines, ~trinomial)
+# mosaic of individual specimens from the different museums
+mosaic(norm.outlines, ~museum)
 # mosaic of individual specimens rendered from different materials
 mosaic(norm.outlines, ~raw.mat)
 
@@ -40,13 +40,13 @@ mosaic(norm.outlines, ~raw.mat)
 calibrate_harmonicpower_efourier(norm.outlines, 
                                  nb.h = 30)
 
-# 11 harmonics needed to capture 99 percent of variation
+# 10 harmonics needed to capture 99 percent of variation
 calibrate_reconstructions_efourier(norm.outlines, 
-                                   range = 1:11)
+                                   range = 1:10)
 
 # generate efa outlines with 11 harmonics
 efa.outlines <- efourier(norm.outlines, 
-                         nb.h = 11, 
+                         nb.h = 10, 
                          norm = TRUE)
 
 # use efa.outlines for pca
@@ -58,7 +58,7 @@ scree_plot(pca.outlines)
 # plot pca by site
 plot_PCA(pca.outlines, 
          morphospace_position = "range",
-         ~trinomial, zoom = 1.3)
+         ~museum, zoom = 1)
 
 # plot pca by raw material
 plot_PCA(pca.outlines, 
@@ -67,7 +67,7 @@ plot_PCA(pca.outlines,
 
 # contribution of each pc
 # by site
-boxplot(pca.outlines, ~trinomial, nax = 1:5)
+boxplot(pca.outlines, ~museum, nax = 1:5)
 # by raw material
 boxplot(pca.outlines, ~raw.mat, nax = 1:5)
 
@@ -89,7 +89,7 @@ MANOVA_PW(pca.outlines, 'raw.mat')
 # mean shapes
 
 # site
-ms.2 <- MSHAPES(efa.outlines, ~trinomial)
+ms.2 <- MSHAPES(efa.outlines, ~museum)
 plot_MSHAPES(ms.2, size = 0.8)
 
 # raw material
