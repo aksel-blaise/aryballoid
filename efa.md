@@ -1,7 +1,7 @@
-Aryballoid shape as a function of applique/burnishing?
+Aryballoid bottle shape as a function of burnishing?
 ================
 Robert Z. Selden, Jr.
-25 September, 2020
+15 March, 2021
 
 # Elliptical Fourier Analysis
 
@@ -20,12 +20,6 @@ library(Momocs)
 ```
 
     ## 
-    ##   Momocs is now retired and will no longer be maintained.
-    ##   It is superseded by Momocs2 and more generally MomX ecosystem:
-    ## 
-    ##              <   https://momx.github.io   >
-
-    ## 
     ## Attaching package: 'Momocs'
 
     ## The following object is masked from 'package:stats':
@@ -34,15 +28,13 @@ library(Momocs)
 
 ``` r
 # read images
-jpg.list <- list.files(here("/jpegs"), full.names = TRUE)
+jpg.list <- list.files(here("./jpegs"), full.names = TRUE)
 
 # read attribute data
 att.data <- read.csv("att.csv", header = TRUE, as.is = TRUE)
 
 # attribute to factor
-att.data$museum <- as.factor(att.data$museum)
 att.data$burnish <- as.factor(att.data$burnish)
-att.data$applique <- as.factor(att.data$applique)
 ```
 
 ## Generate outlines
@@ -77,7 +69,7 @@ outlines <- jpg.list %>%
     ## [ 20 / 21 ]  7072.jpg
     ## [ 21 / 21 ]  X-49.jpg
 
-    ## Done in 7.1 secs
+    ## Done in 6.9 secs
 
 ``` r
 # add attributes
@@ -90,29 +82,6 @@ norm.outlines <- data.out %>%
   coo_align() %>% 
   coo_center()
 ```
-
-## Pile and mosaics
-
-``` r
-# outline pile
-pile(norm.outlines)
-```
-
-<img src="efa_files/figure-gfm/stack.panel-1.png" width="100%" />
-
-``` r
-# mosaic - appliqued or not
-mosaic(norm.outlines, ~applique)
-```
-
-<img src="efa_files/figure-gfm/stack.panel-2.png" width="100%" />
-
-``` r
-# mosaic - burnished or not
-mosaic(norm.outlines, ~burnish)
-```
-
-<img src="efa_files/figure-gfm/stack.panel-3.png" width="100%" />
 
 ## Calibrate harmonic + EFA
 
@@ -249,59 +218,29 @@ scree_plot(pca.outlines)
 <img src="efa_files/figure-gfm/pca.plot-1.png" width="100%" />
 
 ``` r
-# plot pca by site
+# plot pca
 plot_PCA(pca.outlines, 
          morphospace_position = "range",
-         ~applique, zoom = 0.95)
+         palette = pal_qual_solarized,
+         chullfilled = TRUE,
+         ~burnish,
+         axesnames = TRUE,
+         morphospace = TRUE,
+         eigen = TRUE,
+         center_origin = TRUE,
+         zoom = 1.15)
 ```
 
 <img src="efa_files/figure-gfm/pca.plot-2.png" width="100%" />
 
 ``` r
-# plot pca by raw material
-plot_PCA(pca.outlines, 
-         morphospace_position = "range",
-         ~burnish, zoom = 0.95)
+# mean shape + 2sd for the first 5 pcs
+PCcontrib(pca.outlines, nax = 1:5)
 ```
 
 <img src="efa_files/figure-gfm/pca.plot-3.png" width="100%" />
 
-``` r
-# contribution of each pc
-# by site
-boxplot(pca.outlines, ~applique, nax = 1:5)
-```
-
-<img src="efa_files/figure-gfm/pca.plot-4.png" width="100%" />
-
-``` r
-# by raw material
-boxplot(pca.outlines, ~burnish, nax = 1:5)
-```
-
-<img src="efa_files/figure-gfm/pca.plot-5.png" width="100%" />
-
-``` r
-# mean shape + 2sd for the first 10 pcs
-PCcontrib(pca.outlines, nax = 1:5)
-```
-
-<img src="efa_files/figure-gfm/pca.plot-6.png" width="100%" />
-
 ## MANOVA + MANOVA\_PW
-
-``` r
-# manova
-
-# shape difference if appliqued?
-MANOVA(pca.outlines, 'applique')
-```
-
-    ## PC axes 1 to 11 were retained
-
-    ##           Df Hotelling-Lawley approx F num Df den Df Pr(>F)
-    ## fac        1           1.2447   1.0184     11      9 0.4974
-    ## Residuals 19
 
 ``` r
 # shape difference if burnished?
@@ -319,19 +258,9 @@ MANOVA(pca.outlines, 'burnish')
 ## Mean shapes
 
 ``` r
-# mean shapes
-
-# applique
-ms.2 <- MSHAPES(efa.outlines, ~applique)
-plot_MSHAPES(ms.2, size = 0.75)
+# burnish
+ms <- MSHAPES(efa.outlines, ~burnish)
+plot_MSHAPES(ms, size = 0.75)
 ```
 
 <img src="efa_files/figure-gfm/ms1-1.png" width="100%" />
-
-``` r
-# burnish
-ms.3 <- MSHAPES(efa.outlines, ~burnish)
-plot_MSHAPES(ms.3, size = 0.75)
-```
-
-<img src="efa_files/figure-gfm/ms1-2.png" width="100%" />
