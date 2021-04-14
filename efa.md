@@ -1,7 +1,7 @@
 Aryballoid bottle shape as a function of burnishing?
 ================
 Robert Z. Selden, Jr.
-15 March, 2021
+14 April, 2021
 
 # Elliptical Fourier Analysis
 
@@ -12,7 +12,7 @@ Robert Z. Selden, Jr.
 library(here)
 ```
 
-    ## here() starts at D:/github/aryballoid
+    ## here() starts at C:/Users/selde/Desktop/github/aryballoid
 
 ``` r
 library(wesanderson)
@@ -69,7 +69,7 @@ outlines <- jpg.list %>%
     ## [ 20 / 21 ]  7072.jpg
     ## [ 21 / 21 ]  X-49.jpg
 
-    ## Done in 6.9 secs
+    ## Done in 6.6 secs
 
 ``` r
 # add attributes
@@ -79,6 +79,7 @@ data.out <- Out(outlines,
 # scale, align, rotate, and center specimens
 norm.outlines <- data.out %>% 
   coo_scale() %>%
+  coo_rotate() %>%
   coo_align() %>% 
   coo_center()
 ```
@@ -219,17 +220,20 @@ scree_plot(pca.outlines)
 
 ``` r
 # plot pca
-plot_PCA(pca.outlines, 
-         morphospace_position = "range",
-         palette = pal_qual_solarized,
-         chullfilled = TRUE,
-         ~burnish,
-         axesnames = TRUE,
-         morphospace = TRUE,
-         eigen = TRUE,
-         center_origin = TRUE,
-         zoom = 1.15)
+plot(pca.outlines,
+     pos.shp = "range_axes",
+     ~burnish,
+     chull = TRUE,
+     morphospace = TRUE,
+     labelsgroups = TRUE,
+     cex.labelsgroups = 0.5,
+     rect.labelsgroups = TRUE,
+     rug = TRUE,
+     grid = TRUE,
+     zoom = 0.95)
 ```
+
+    ## will be deprecated soon, see ?plot_PCA
 
 <img src="efa_files/figure-gfm/pca.plot-2.png" width="100%" />
 

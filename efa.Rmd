@@ -43,6 +43,7 @@ data.out <- Out(outlines,
 # scale, align, rotate, and center specimens
 norm.outlines <- data.out %>% 
   coo_scale() %>%
+  coo_rotate() %>%
   coo_align() %>% 
   coo_center()
 ```
@@ -74,16 +75,17 @@ pca.outlines <- PCA(efa.outlines)
 scree_plot(pca.outlines)
 
 # plot pca
-plot_PCA(pca.outlines, 
-         morphospace_position = "range",
-         palette = pal_qual_solarized,
-         chullfilled = TRUE,
-         ~burnish,
-         axesnames = TRUE,
-         morphospace = TRUE,
-         eigen = TRUE,
-         center_origin = TRUE,
-         zoom = 1.15)
+plot(pca.outlines,
+     pos.shp = "range_axes",
+     ~burnish,
+     chull = TRUE,
+     morphospace = TRUE,
+     labelsgroups = TRUE,
+     cex.labelsgroups = 0.5,
+     rect.labelsgroups = TRUE,
+     rug = TRUE,
+     grid = TRUE,
+     zoom = 0.95)
 
 # mean shape + 2sd for the first 5 pcs
 PCcontrib(pca.outlines, nax = 1:5)
